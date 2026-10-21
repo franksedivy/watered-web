@@ -22,7 +22,7 @@ Frank supplied the app icon and Bytepie logo exports. The homepage app icon has 
 - `src/favicon.ico` bundles the separate 16px, 32px and 48px PNG artwork.
 - `apple-touch-icon.png` is 180 × 180px.
 - `icon-192.png` and `icon-512.png` are referenced by `src/site.webmanifest`.
-- `logo-bytepie.png` supplies the CSS mask for the readable Bytepie credit.
+- `logo-bytepie.png` (79 × 21) and `logo-bytepie@2x.png` (158 × 42) supply the CSS mask for the readable Bytepie credit. `image-set()` lets the browser select a source for the display density while preserving the 79 × 21 CSS-pixel size; a single-image fallback supports browsers without `image-set()`.
 
 Image files are under `src/assets/images/`. Eleventy copies that directory through `src/assets`; the favicon and manifest have explicit root-level copy mappings.
 
