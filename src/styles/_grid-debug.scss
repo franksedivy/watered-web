@@ -1,3 +1,4 @@
+// Optional specimen overlays, enabled by the grid-guide controls.
 body:has(#show-grid) {
   position: relative;
   min-block-size: 100svh;
@@ -35,9 +36,9 @@ body:has(#show-grid:checked)::after {
   z-index: 100;
   pointer-events: none;
   background-image: linear-gradient(
-	to bottom,
-	rgb(0 100 255 / 20%) 1px,
-	transparent 1px
+    to bottom,
+    rgb(0 100 255 / 20%) 1px,
+    transparent 1px
   );
   background-size: 100% var(--baseline);
 }
@@ -57,8 +58,8 @@ body:has(#show-columns:checked) .column-overlay {
 .column-overlay__grid {
   display: grid;
   grid-template-columns: repeat(
-	var(--grid-columns),
-	minmax(0, 1fr)
+    var(--grid-columns),
+    minmax(0, 1fr)
   );
   column-gap: var(--grid-gap);
   block-size: 100%;
@@ -78,6 +79,6 @@ body:has(#show-columns:checked) .column-overlay {
 
 @media (min-width: 60rem) {
   .column-overlay__grid > span:nth-child(n + 5) {
-	display: block;
+    display: block;
   }
 }

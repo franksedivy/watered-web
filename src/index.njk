@@ -1,8 +1,31 @@
 ---
 layout: layouts/base.njk
 title: Watered
-description: Watered - iOS hydration tracker apple forgot.
+description: The hydration tracker Apple forgot.
+bodyClass: page-home
 ---
 
-<h1>Watered</h1>
-<p>Beautiful iOS hydratino tracker Apple forgot to build.</p>
+{% from "components/water.njk" import water %}
+
+<header class="layout-grid home-intro">
+  <img
+      class="home-icon"
+      src="/assets/images/app-icon.png"
+      srcset="/assets/images/app-icon@2x.png 2x"
+      width="128"
+      height="128"
+      alt=""
+  >
+  <h1 class="type-display home-wordmark">Watered</h1>
+  <p class="type-lead home-tagline">
+    The iOS hydration tracker Apple forgot.
+  </p>
+</header>
+<footer class="layout-grid home-credit">
+  <p class="type-small">
+    Crafted lovingly by:
+    <span class="home-credit-logo">Bytepie</span>
+  </p>
+</footer>
+
+{{ water("home-water") }}

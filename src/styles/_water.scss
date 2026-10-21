@@ -1,0 +1,166 @@
+// Specimen controls and the two experimental wave treatments.
+// Technique: rotate rounded squares, then compress the entire surface vertically.
+// The matching sky colour conceals the pool above its moving boundary.
+.water-study {
+  --water-sky: #d5edf8;
+  --water-speed: 16s;
+
+  display: grid;
+  gap: var(--space-2);
+}
+
+.water-study-control {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  justify-self: start;
+  font: 0.875rem / 1.5 system-ui, sans-serif;
+  cursor: pointer;
+}
+
+.water-study-control input {
+  margin: 0;
+  accent-color: #006dfb;
+}
+
+.water-scene {
+  container-type: inline-size;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-block-size: 17rem;
+  aspect-ratio: 16 / 6;
+  border-radius: 1rem;
+  background: var(--water-sky);
+}
+
+// Conceal the remote upper edges of the rotating shapes inside the sky.
+.water-scene::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 60%;
+  z-index: 1;
+  background: var(--water-sky);
+}
+
+// Start above the lowest wave so rotating edges never expose an empty seam.
+.water-pool {
+  position: absolute;
+  inset: calc(64% - 4cqw) 0 0;
+  background: linear-gradient(155deg, #70dff5, #22bdf2 45%, #0088fb);
+}
+
+// Its bottom edge is the waterline. Scaling the parent keeps full-width waves
+// shallow; rotating the children alone would create very large vertical swells.
+.water-surface {
+  position: absolute;
+  inset-inline-start: -50%;
+  inset-block-end: 36%;
+  inline-size: 200%;
+  aspect-ratio: 1;
+  transform: scaleY(0.12);
+  transform-origin: center bottom;
+}
+
+.water-surface::before,
+.water-surface::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 43%;
+  background: var(--water-sky);
+}
+
+.water-surface::before {
+  opacity: 0.45;
+  transform: rotate(35deg);
+  box-shadow: 0 12px 0 rgb(223 255 255 / 45%);
+}
+
+.water-surface::after {
+  transform: rotate(8deg);
+  box-shadow: 0 12px 0 rgb(232 255 255 / 85%), 0 30px 40px rgb(120 241 255 / 45%);
+}
+
+// Start with still water; only opt into animation when motion is welcome.
+@media (prefers-reduced-motion: no-preference) {
+  .water-surface::before {
+    animation: water-turn calc(var(--water-speed) * 1.4) linear infinite reverse;
+    animation-delay: -9s;
+  }
+
+  .water-surface::after {
+    animation: water-turn var(--water-speed) linear infinite;
+    animation-delay: -3s;
+  }
+}
+
+.water-study:has(.water-study-pause:checked) .water-surface::before,
+.water-study:has(.water-study-pause:checked) .water-surface::after {
+  animation-play-state: paused;
+}
+
+@keyframes water-turn {
+  from {
+    transform: rotate(0turn);
+  }
+
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+// Second study: adapt the liquid-loader surface to the full container width.
+// A deeper vertical scale and rounder cutouts give this pool a stronger swell.
+.water-study--rolling {
+  --water-sky: #0a1e32;
+  --water-speed: 8s;
+}
+
+.water-scene--rolling .water-pool {
+  inset-block-start: calc(55% - 8cqw);
+  background: linear-gradient(145deg, #85e8fa, #27b7f5 50%, #0065ee);
+}
+
+.water-scene--rolling .water-surface {
+  inset-block-end: 45%;
+  transform: scaleY(0.22);
+}
+
+.water-scene--rolling .water-surface::before,
+.water-scene--rolling .water-surface::after {
+  border-radius: 40%;
+}
+
+.water-scene--rolling .water-surface::before {
+  box-shadow: 0 10px 0 rgb(177 242 255 / 30%);
+}
+
+.water-scene--rolling .water-surface::after {
+  box-shadow: 0 6px 0 rgb(212 255 255 / 45%);
+}
+
+// Carry the depth shading across the whole pool rather than a circular vessel.
+.water-scene--rolling::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  box-shadow: inset 0 -2rem 3rem rgb(0 28 100 / 25%);
+}
+
+// Third study: a generated still texture clipped to a clean, static SVG edge.
+// Both the image and bubbles share one mask, so bubbles disappear at the surface.
+.water-scene--bubbles {
+  background: linear-gradient(to bottom, #87c7ea, #dceff8);
+}
+
+.water-scene--bubbles::before {
+  content: none;
+}
+
+.water-study:has(.water-study-pause:checked) .water-bubble {
+  animation-play-state: paused;
+}
+
