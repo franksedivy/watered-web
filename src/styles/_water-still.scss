@@ -6,6 +6,8 @@
   block-size: 48%;
   background: #399cf0 url("/assets/images/water-still-texture.png") center / cover no-repeat;
   mask: url("/assets/images/water-still-mask.svg") center / 100% 100% no-repeat;
+  
+  margin-bottom: -1px;
 }
 
 .water-still::after {
