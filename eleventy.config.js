@@ -5,6 +5,8 @@ import { compileAsync } from "sass";
 export default function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy({
 	"src/assets": "assets",
+	"src/favicon.ico": "favicon.ico",
+	"src/site.webmanifest": "site.webmanifest",
   });
 
   eleventyConfig.addWatchTarget("./src/styles/");
