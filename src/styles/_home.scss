@@ -109,6 +109,12 @@ html:has(body.page-home) {
     inset: 0;
     background-color: #ff3b30;
     mask: url("/assets/images/logo-bytepie.png") center / contain no-repeat;
+
+    // Let the browser choose a mask for the display density; retain the URL fallback.
+    mask-image: image-set(
+      url("/assets/images/logo-bytepie.png") 1x,
+      url("/assets/images/logo-bytepie@2x.png") 2x
+    );
   }
 }
 
