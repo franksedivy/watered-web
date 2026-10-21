@@ -1,0 +1,41 @@
+---
+layout: layouts/specimen.njk
+title: Layout specimen — Frank Sedivy
+description: Responsive grid arrangements.
+specimenSection: layout
+---
+
+<header>
+  <p class="type-small">Layout specimen</p>
+  <h1 class="type-display">Room to arrange.</h1>
+  <p class="type-lead">
+    Each number shows how many columns a block spans.
+    Resize the window to explore both grids.
+  </p>
+</header>
+
+{% for reference in gridExamples %}
+<div class="grid-reference grid-reference--{{ reference.mode }}">
+  <p class="type-small">{{ reference.columns }} columns</p>
+
+  {% for section in reference.sections %}
+  <section>
+    <h2 class="type-heading">{{ section.title }}</h2>
+
+    {% for row in section.rows %}
+    <div
+      class="layout-grid grid-example"
+      role="group"
+      aria-label="Column spans: {{ row | join(' + ') }}"
+    >
+      {% for span in row %}
+      <div class="{{ reference.classPrefix }}{{ span }}">
+        {{ span }}
+      </div>
+      {% endfor %}
+    </div>
+    {% endfor %}
+  </section>
+  {% endfor %}
+</div>
+{% endfor %}

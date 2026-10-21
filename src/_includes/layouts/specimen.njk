@@ -1,0 +1,44 @@
+---
+layout: layouts/base.njk
+---
+
+<nav class="specimen-tabs" aria-label="Specimen sections">
+  <a
+	href="/specimen/typography/"
+	{% if specimenSection == "typography" %}aria-current="page"{% endif %}
+  >
+	Typography
+  </a>
+  <a
+	href="/specimen/layout/"
+	{% if specimenSection == "layout" %}aria-current="page"{% endif %}
+  >
+	Layout
+  </a>
+</nav>
+
+<div class="specimen">
+  {{ content | safe }}
+</div>
+
+<fieldset class="grid-controls">
+  <legend>Grid guides</legend>
+
+  <label>
+	<input type="checkbox" id="show-grid">
+	Baselines
+  </label>
+
+  <label>
+	<input type="checkbox" id="show-columns">
+	Columns
+  </label>
+</fieldset>
+
+<div class="column-overlay" aria-hidden="true">
+  <div class="column-overlay__grid">
+	{% for column in range(1, 13) %}
+	  <span></span>
+	{% endfor %}
+  </div>
+</div>

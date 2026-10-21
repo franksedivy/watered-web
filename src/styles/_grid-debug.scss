@@ -1,0 +1,83 @@
+body:has(#show-grid) {
+  position: relative;
+  min-block-size: 100svh;
+}
+
+.grid-controls {
+  position: fixed;
+  inset-inline-end: 1rem;
+  inset-block-end: 1rem;
+  z-index: 101;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  min-inline-size: 0;
+  max-inline-size: calc(100% - 2rem);
+  margin: 0;
+  padding: 0.5rem 1rem;
+  background: white;
+  color: black;
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
+  font: 0.875rem / 1.5 system-ui, sans-serif;
+}
+
+.grid-controls label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+body:has(#show-grid:checked)::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  background-image: linear-gradient(
+	to bottom,
+	rgb(0 100 255 / 20%) 1px,
+	transparent 1px
+  );
+  background-size: 100% var(--baseline);
+}
+
+.column-overlay {
+  display: none;
+  position: absolute;
+  inset: 0;
+  z-index: 99;
+  pointer-events: none;
+}
+
+body:has(#show-columns:checked) .column-overlay {
+  display: block;
+}
+
+.column-overlay__grid {
+  display: grid;
+  grid-template-columns: repeat(
+	var(--grid-columns),
+	minmax(0, 1fr)
+  );
+  column-gap: var(--grid-gap);
+  block-size: 100%;
+  max-inline-size: var(--page-width);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.column-overlay__grid > span {
+  background: rgb(220 60 120 / 8%);
+  border-inline: 1px solid rgb(220 60 120 / 20%);
+}
+
+.column-overlay__grid > span:nth-child(n + 5) {
+  display: none;
+}
+
+@media (min-width: 60rem) {
+  .column-overlay__grid > span:nth-child(n + 5) {
+	display: block;
+  }
+}

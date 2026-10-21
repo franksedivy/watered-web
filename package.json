@@ -1,0 +1,28 @@
+{
+  "name": "watered-web",
+  "version": "0.1.0",
+  "private": true,
+  "description": "The Watered website.",
+  "type": "module",
+  "scripts": {
+    "dev": "eleventy --serve",
+    "build": "eleventy"
+  },
+  "engines": {
+    "node": "24.x"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/franksedivy/watered-web.git"
+  },
+  "keywords": [],
+  "author": "Frank Sedivy",
+  "bugs": {
+    "url": "https://github.com/franksedivy/watered-web/issues"
+  },
+  "homepage": "https://watered.app",
+  "devDependencies": {
+    "@11ty/eleventy": "^3.1.7",
+    "sass": "^1.105.2"
+  }
+}
