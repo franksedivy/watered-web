@@ -1,23 +1,10 @@
+// Single Sass entry point. @use emits each partial once.
+// Foundations first, page overrides last; order is part of the cascade.
 @use "tokens";
+@use "fonts";
+@use "base";
 @use "typography";
-@use "grid-debug";
 @use "layout";
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  font-family: var(--font-body);
-  font-size: var(--text-body);
-  line-height: var(--leading-body);
-}
-
-main {
-  max-inline-size: var(--page-width);
-  margin-inline: auto;
-  padding: var(--space-5) var(--gutter);
-}
+@use "specimens";
+@use "grid-debug";
+@use "home";

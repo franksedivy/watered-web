@@ -1,0 +1,141 @@
+// Homepage presentation. Keep page-specific overrides out of the shared foundation.
+
+// Retained iPhone Safari workaround, confirmed during manual testing.
+// The extra height paints beyond the visible viewport; hidden overflow can clip
+// content at large text sizes. Revisit separately from structural CSS cleanup.
+html:has(body.page-home),
+body.page-home {
+  height: 120vh;
+  height: 120dvh;
+  margin: 0;
+  overflow: hidden;
+}
+
+html:has(body.page-home) {
+  background-color: #87c7ea;
+}
+
+.page-home {
+  color: #005c97;
+  background: linear-gradient(to bottom, #87c7ea, #dceff8);
+}
+
+.page-home main {
+  display: grid;
+  align-items: center;
+  min-block-size: 100svh;
+}
+
+// Introduction uses the shared layout-grid and typography roles.
+.home-intro {
+  justify-items: center;
+  text-align: center;
+}
+
+.home-tagline {
+  --text-lead: clamp(1.25rem, 1.125rem + 0.5vw, 1.5rem);
+
+  max-inline-size: 15.125rem;
+  margin-inline: auto;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+
+// Live text with a proportional texture and a soft blue glow.
+.home-wordmark {
+  --text-display: clamp(3rem, 1.5rem + 4vw, 5rem);
+  --leading-display: normal;
+
+  font-family: var(--font-brand);
+  letter-spacing: -0.02em;
+
+  color: #006dfb;
+  background-color: #006dfb;
+  background-image: url("/assets/images/wordmark-texture.png");
+  background-size: 100% auto;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  filter: drop-shadow(0 0 20px rgb(0 109 251 / 35%));
+
+  @supports (background-clip: text) or (-webkit-background-clip: text) {
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+}
+
+// Plain-text credit; the mask below progressively enhances its logo.
+.home-credit {
+  --text-small: 0.75rem;
+
+  text-align: center;
+}
+
+.home-credit-logo {
+  display: block;
+  margin: var(--space-1) auto 0;
+  color: #ff3b30;
+}
+
+// Keep the text fallback when CSS masks are unavailable.
+@supports (mask-image: url("")) {
+  .home-credit-logo {
+    position: relative;
+    inline-size: 79px;
+    block-size: 21px;
+    color: transparent;
+  }
+
+  .home-credit-logo::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: #ff3b30;
+    mask: url("/assets/images/logo-bytepie.png") center / contain no-repeat;
+  }
+}
+
+// Short landscape viewports: two columns, with the credit under the text.
+// Keep overrides after base rules so the logo margin reset wins.
+@media (orientation: landscape) and (max-height: 35rem) {
+  html:has(body.page-home),
+  body.page-home {
+    height: 100vh;
+    height: 100dvh;
+  }
+
+  .home-intro {
+    --grid-columns: 2;
+
+    transform: translateY(calc(-1 * var(--space-2)));
+    row-gap: 0;
+    text-align: left;
+  }
+
+  .home-icon {
+    grid-column: 1;
+    grid-row: 1 / 3;
+  }
+
+  .home-wordmark,
+  .home-tagline {
+    grid-column: 2;
+    margin-inline: 0;
+    justify-self: start;
+  }
+
+  .home-credit {
+    --grid-columns: 2;
+
+    text-align: left;
+  }
+
+  .home-credit > p {
+    grid-column: 2;
+  }
+
+  .home-credit-logo {
+    margin-inline: 0;
+  }
+}

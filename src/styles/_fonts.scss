@@ -1,0 +1,16 @@
+// Self-hosted regular faces. Keep font files and family names in sync.
+@font-face {
+  font-family: "Adobe Caslon Pro";
+  src: url("/assets/fonts/ACaslonPro-Regular.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Agbalumo";
+  src: url("/assets/fonts/Agbalumo-Regular.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}

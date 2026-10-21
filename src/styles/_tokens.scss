@@ -1,5 +1,8 @@
+// Runtime design tokens shared by every page.
 :root {
-  --font-body: Georgia, "Times New Roman", serif;
+  // Font families and fluid type scale.
+  --font-body: "Adobe Caslon Pro", Georgia, "Times New Roman", serif;
+  --font-brand: "Agbalumo", Georgia, serif;
 
   --text-small: 0.875rem;
   --text-body: clamp(1.0625rem, 1rem + 0.25vw, 1.25rem);
@@ -11,6 +14,7 @@
   --leading-heading: 1.15;
   --leading-display: 1.05;
 
+  // Spacing follows the body-text baseline.
   --space-1: calc(var(--baseline) * 0.25);
   --space-2: calc(var(--baseline) * 0.5);
   --space-3: var(--baseline);
@@ -18,18 +22,19 @@
   --space-5: calc(var(--baseline) * 2);
   --space-6: calc(var(--baseline) * 3);
 
+  // Page measure and responsive grid.
   --gutter: clamp(1.25rem, 0.75rem + 2vw, 3rem);
   --page-width: 80rem;
   --measure-body: 65ch;
-  
+
   --baseline: calc(var(--text-body) * var(--leading-body));
-  
+
   --grid-columns: 4;
   --grid-gap: var(--space-3);
 }
 
 @media (min-width: 60rem) {
   :root {
-	--grid-columns: 12;
+    --grid-columns: 12;
   }
 }

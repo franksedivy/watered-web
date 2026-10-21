@@ -1,3 +1,4 @@
+// Shared type roles. Pages can override the tokens without duplicating these rules.
 h1,
 h2,
 h3 {
@@ -37,6 +38,7 @@ h3 {
   font-size: var(--text-small);
 }
 
+// Vertical rhythm for longer-form content.
 .prose {
   max-inline-size: var(--measure-body);
 }
@@ -47,12 +49,4 @@ h3 {
 
 .prose > * + :is(h2, h3) {
   margin-block-start: var(--space-5);
-}
-
-.specimen > * + * {
-  margin-block-start: var(--space-6);
-}
-
-.specimen > header > * + * {
-  margin-block-start: var(--space-3);
 }
