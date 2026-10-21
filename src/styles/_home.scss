@@ -5,6 +5,7 @@
 // content at large text sizes. Revisit separately from structural CSS cleanup.
 html:has(body.page-home),
 body.page-home {
+  isolation: isolate;
   height: 120vh;
   height: 120dvh;
   margin: 0;
@@ -16,14 +17,30 @@ html:has(body.page-home) {
 }
 
 .page-home {
+  --home-water-height: 25svh;
+
   color: #005c97;
   background: linear-gradient(to bottom, #87c7ea, #dceff8);
 }
 
 .page-home main {
+  position: relative;
+  z-index: 1;
   display: grid;
   align-items: center;
   min-block-size: 100svh;
+  padding-block-start: var(--space-2);
+  padding-block-end: calc(var(--home-water-height) + var(--space-2));
+}
+
+// Anchor the water to the screen, independent of the oversized Safari backdrop.
+// Main reserves the same height so the credit stays above the surface.
+.home-water {
+  position: fixed;
+  z-index: 0;
+  inset: auto 0 0;
+  block-size: var(--home-water-height);
+  pointer-events: none;
 }
 
 // Introduction uses the shared layout-grid and typography roles.
@@ -93,6 +110,19 @@ html:has(body.page-home) {
     inset: 0;
     background-color: #ff3b30;
     mask: url("/assets/images/logo-bytepie.png") center / contain no-repeat;
+  }
+}
+
+// A shallow phone waterline, with a little extra depth in each orientation.
+@media (width < 60rem) {
+  .page-home {
+    --home-water-height: calc(clamp(1.25rem, 4svh, 2.5rem) + 20px);
+  }
+}
+
+@media (width < 60rem) and (orientation: landscape) {
+  .page-home {
+    --home-water-height: calc(clamp(1.25rem, 4svh, 2.5rem) + 10px);
   }
 }
 

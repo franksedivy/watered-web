@@ -1,0 +1,74 @@
+---
+layout: layouts/specimen.njk
+title: Water specimen — Watered
+description: Three water studies comparing CSS waves with a still image and CSS bubbles.
+specimenSection: water
+---
+
+{% from "components/water.njk" import water %}
+
+<header>
+  <p class="type-small">Water specimen</p>
+  <h1 class="type-display">A little movement.</h1>
+  <p class="type-lead">
+    Three approaches to moving water.
+    Resize the page and pause each study to compare their surfaces.
+  </p>
+</header>
+
+<section class="water-study" aria-labelledby="water-study-title">
+  <h2 id="water-study-title" class="type-heading">CSS waves</h2>
+  <label class="water-study-control">
+    <input type="checkbox" class="water-study-pause" id="pause-water">
+    Pause water
+  </label>
+  <div class="water-scene" aria-hidden="true">
+    <div class="water-pool"></div>
+    <div class="water-surface"></div>
+  </div>
+  <p class="type-small water-study-caption">
+    Decorative motion only; this study does not simulate pouring or accumulated volume.
+    Reduced-motion preferences keep the water still.
+  </p>
+</section>
+
+<p class="type-small">
+  Technique reference:
+  <a href="https://www.geekboots.com/css/water-wave-animation?tab=code">Geekboots’ CSS water wave animation</a>.
+</p>
+
+<section class="water-study water-study--rolling" aria-labelledby="water-rolling-title">
+  <h2 id="water-rolling-title" class="type-heading">Rolling water</h2>
+  <label class="water-study-control">
+    <input type="checkbox" class="water-study-pause" id="pause-water-rolling">
+    Pause rolling water
+  </label>
+  <div class="water-scene water-scene--rolling" aria-hidden="true">
+    <div class="water-pool"></div>
+    <div class="water-surface"></div>
+  </div>
+  <p class="type-small water-study-caption">
+    A full-width pool with deeper shading and a more pronounced rolling surface.
+    The water level stays constant; this is decorative motion, not loading progress.
+  </p>
+</section>
+
+<p class="type-small">
+  Technique reference:
+  <a href="https://www.youtube.com/watch?v=OGQTueiKhnU">Online Tutorials’ Liquid Loader Animation Effects</a>.
+</p>
+
+<section class="water-study water-study--bubbles" aria-labelledby="water-bubbles-title">
+  <h2 id="water-bubbles-title" class="type-heading">Still water, rising bubbles</h2>
+  <label class="water-study-control">
+    <input type="checkbox" class="water-study-pause" id="pause-water-bubbles">
+    Pause bubbles
+  </label>
+  <div class="water-scene water-scene--bubbles" aria-hidden="true">
+    {{ water() }}
+  </div>
+  <p class="type-small water-study-caption">
+    A still, bubble-free water texture with a clean fixed waterline.
+    Only the bubbles move, using CSS; reduced motion leaves calm water.
+  </p>
+</section>

@@ -1,0 +1,69 @@
+// Shared still-water artwork and CSS bubbles for the homepage and specimen.
+// The static waterline and texture remain visible without JavaScript or motion.
+.water-still {
+  position: absolute;
+  inset: auto 0 0;
+  block-size: 48%;
+  background: #399cf0 url("/assets/images/water-still-texture.png") center / cover no-repeat;
+  mask: url("/assets/images/water-still-mask.svg") center / 100% 100% no-repeat;
+}
+
+.water-still::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: url("/assets/images/water-still-highlight.svg") center / 100% 100% no-repeat;
+}
+
+// Each track is as tall as the pool: translateY(-100%) travels its full depth.
+// Small, varied circles provide the bubble bodies without image sprites or JS.
+.water-bubble {
+  display: none;
+  position: absolute;
+  inset-inline-start: var(--bubble-left);
+  inset-block-end: 0;
+  inline-size: var(--bubble-size);
+  block-size: 100%;
+  pointer-events: none;
+}
+
+.water-bubble::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: calc(-1 * var(--bubble-size));
+  aspect-ratio: 1;
+  border: 1px solid rgb(223 251 255 / 60%);
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 25%, rgb(255 255 255 / 90%), transparent 45%);
+  box-shadow: inset -1px -1px 1px rgb(27 102 196 / 35%), 0 0 2px rgb(218 251 255 / 25%);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .water-bubble {
+    display: block;
+    animation: water-bubble-rise var(--bubble-duration) linear infinite;
+    animation-delay: var(--bubble-delay);
+  }
+}
+
+@keyframes water-bubble-rise {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0);
+  }
+
+  12% {
+    opacity: 0.75;
+  }
+
+  85% {
+    opacity: 0.65;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(var(--bubble-drift), -100%);
+  }
+}

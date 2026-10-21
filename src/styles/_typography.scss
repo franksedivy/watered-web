@@ -38,6 +38,15 @@ h3 {
   font-size: var(--text-small);
 }
 
+// Brand face composes with display, heading or lead sizes from the shared scale.
+.type-brand {
+  font-family: var(--font-brand);
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: -0.02em;
+  overflow-wrap: anywhere;
+}
+
 // Vertical rhythm for longer-form content.
 .prose {
   max-inline-size: var(--measure-body);
