@@ -12,14 +12,17 @@ body.page-home {
 }
 
 html:has(body.page-home) {
-  background-color: #87c7ea;
+  background-color: #fff;
 }
 
 .page-home {
   --home-water-height: 25svh;
+  --home-glass-inset: clamp(0.125rem, 0.375vw, 0.375rem);
+  --home-glass-radius: clamp(0.4375rem, 1.25vw, 0.75rem);
+  --home-glass-top-radius: var(--home-glass-radius);
 
   color: #005c97;
-  background: linear-gradient(to bottom, #87c7ea, #dceff8);
+  background: #fff;
 }
 
 .page-home main {
@@ -28,17 +31,44 @@ html:has(body.page-home) {
   display: grid;
   align-items: center;
   min-block-size: 100svh;
-  padding-block-start: var(--space-2);
-  padding-block-end: calc(var(--home-water-height) + var(--space-2));
+  padding-block-start: calc(var(--space-2) + var(--home-glass-inset));
+  padding-block-end: calc(var(--home-water-height) + var(--space-2) + var(--home-glass-inset));
 }
 
-// Anchor the water to the screen, independent of the oversized Safari backdrop.
-// Main reserves the same height so the credit stays above the surface.
+// The existing main supplies the glass without another layout wrapper. Its
+// gradient sits behind the content; a separate light rim remains above water.
+.page-home main::before,
+.page-home main::after {
+  content: "";
+  position: fixed;
+  inset: var(--home-glass-inset);
+  border-radius: var(--home-glass-top-radius) var(--home-glass-top-radius)
+    var(--home-glass-radius) var(--home-glass-radius);
+  pointer-events: none;
+}
+
+.page-home main::before {
+  z-index: -1;
+  background: linear-gradient(to bottom, #87c7ea, #dceff8);
+  box-shadow: 0 0.25rem 1rem rgb(24 94 137 / 10%);
+}
+
+.page-home main::after {
+  z-index: 3;
+  border: 1px solid rgb(238 252 255 / 65%);
+}
+
+// Both water treatments share the glass's sides and base. Main reserves the
+// pool's depth, keeping the credit above its starting level.
 .home-water {
   position: fixed;
   z-index: 0;
-  inset: auto 0 0;
+  inset: auto var(--home-glass-inset) var(--home-glass-inset);
   block-size: var(--home-water-height);
+  margin-block-end: 0;
+  border-end-start-radius: var(--home-glass-radius);
+  border-end-end-radius: var(--home-glass-radius);
+  overflow: hidden;
   pointer-events: none;
 }
 
@@ -118,15 +148,19 @@ html:has(body.page-home) {
   }
 }
 
-// A shallow phone waterline, with a little extra depth in each orientation.
+// Smaller viewports use a roomier glass inset and rounder corners.
 @media (width < 60rem) {
   .page-home {
+    --home-glass-inset: clamp(0.375rem, 1.125vw, 1.125rem);
+    --home-glass-radius: clamp(1.875rem, 6vw, 3.75rem);
     --home-water-height: calc(clamp(1.25rem, 4svh, 2.5rem) + 20px);
   }
 }
 
 @media (width < 60rem) and (orientation: landscape) {
   .page-home {
+    --home-glass-inset: clamp(0.1875rem, 0.5625vw, 0.5625rem);
+    --home-glass-top-radius: 0px;
     --home-water-height: calc(clamp(1.25rem, 4svh, 2.5rem) + 10px);
   }
 }
@@ -173,4 +207,36 @@ html:has(body.page-home) {
   .home-credit-logo {
     margin-inline: 0;
   }
+}
+
+// Progressive enhancement: the empty canvas remains invisible until its first
+// successful water frame. Fixed positioning keeps the Safari backdrop intact.
+.home-water-canvas {
+  // Simulate slightly beyond the glass, then clip back to its inner shape.
+  // This lets the pool meet the walls without exposing particle padding.
+  --home-water-bleed: clamp(8px, 1.6vw, 48px);
+
+  position: fixed;
+  z-index: 2;
+  inset: calc(var(--home-glass-inset) - var(--home-water-bleed));
+  inline-size: calc(100% - var(--home-glass-inset) * 2 + var(--home-water-bleed) * 2);
+  block-size: calc(100% - var(--home-glass-inset) * 2 + var(--home-water-bleed) * 2);
+  clip-path: inset(var(--home-water-bleed) round
+    var(--home-glass-top-radius) var(--home-glass-top-radius)
+    var(--home-glass-radius) var(--home-glass-radius));
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.home-water-canvas[data-ready] {
+  visibility: visible;
+}
+
+// Visibility preserves its measurable CSS depth for responsive seeding.
+.home-water[data-inactive] {
+  visibility: hidden;
+}
+
+.home-water[data-inactive] .water-bubble {
+  animation-play-state: paused;
 }

@@ -1,0 +1,59 @@
+{% from "components/water.njk" import water %}
+
+<section class="fluid-study" data-fluid-study data-state="idle" aria-labelledby="water-simulation-title" aria-describedby="fluid-instructions">
+  <h2 id="water-simulation-title" class="type-heading">SPHjs simulation</h2>
+  <p id="fluid-instructions">Start the study, then tap the tank or use Add water. Each action adds the same amount. Compare pouring from your tap with adding to the pool and disturbing its surface.</p>
+  <div class="fluid-tank" aria-hidden="true">
+    <img class="fluid-reference-icon" data-reference-icon
+      src="/assets/images/app-icon.png" srcset="/assets/images/app-icon@2x.png 2x"
+      width="128" height="128" alt="" draggable="false">
+    <div class="fluid-static" data-fallback>{{ water() }}</div>
+    <div class="fluid-calm" data-calm hidden></div>
+    <canvas hidden></canvas>
+  </div>
+  <div class="fluid-controls" data-controls>
+    <button type="button" data-start disabled>Start SPHjs</button>
+    <button type="button" data-add disabled>Add water</button>
+    <button type="button" data-pause aria-pressed="false" disabled>Pause</button>
+    <button type="button" data-reset disabled>Reset</button>
+    <label><input type="checkbox" data-animate disabled> Animate water</label>
+    <label>Water surface
+      <select data-surface disabled aria-describedby="surface-help">
+        <option value="abstract">Original</option>
+        <option value="realistic">Light &amp; depth</option>
+      </select>
+    </label>
+    <label><input type="checkbox" data-refraction checked disabled> Refraction</label>
+    <label><input type="checkbox" data-foam checked disabled> Surface foam</label>
+    <label><input type="checkbox" data-particles disabled> Show particles</label>
+    <label class="fluid-size-control">Particle scale
+      <input type="range" id="particle-scale" data-particle-size min="0.5" max="1.5" step="0.1" value="0.8" aria-describedby="particle-size-help" disabled>
+      <output for="particle-scale" data-size-value>0.8×</output>
+    </label>
+    <button type="button" data-apply-size disabled>Apply size &amp; reset</button>
+    <label data-radius-control hidden><input type="checkbox" data-interaction-radius disabled> Show interaction radius</label>
+    <fieldset>
+      <legend>Tap behaviour</legend>
+      <label><input type="radio" name="interaction" value="pour" checked disabled> Pour here</label>
+      <label><input type="radio" name="interaction" value="pool" disabled> Raise and disturb</label>
+    </fieldset>
+  </div>
+  <p class="type-small" id="particle-size-help">Changing size resets the pool. Larger particles use a lower particle limit; the starting count stays 240.</p>
+  <p class="type-small" id="surface-help">Light &amp; depth adds reflective highlights, depth colour and refracted light patterns. It changes the water shading; Show particles bypasses both treatments. Refraction bends the submerged icon in Light &amp; depth, leaving the part above water sharp. WebGL2 is required for surface shading. Surface foam whitens disturbed upper particles and fades as they settle.</p>
+  <p class="type-small fluid-particle-help" data-particle-help hidden></p>
+  <p class="type-small"><output data-count>240 / 1200 particles</output> · Up to 60 particles per addition · Reset restores the starting pool.</p>
+  <p class="type-small fluid-metrics" data-metrics>Physics loads only when you start this study.</p>
+  <p class="type-small fluid-status" data-status role="status">Still water until started. Reduced motion starts in calm mode.</p>
+  <noscript><p>The still water works without JavaScript. Enable JavaScript to try the simulation; the CSS alternatives below work without it.</p></noscript>
+
+  <section class="prose">
+    <h3 class="type-heading">What to compare</h3>
+    <p>Try repeated taps, let the water settle, fill the tank, then resize or rotate your phone. The limit is up to 1,200 particles, reduced for larger sizes; filling stops at the displayed limit. The amount is experimental, not a measurement in millilitres.</p>
+    <p>The icon stays in place as water rises over it. It is a visual reference, not a collision object.</p>
+    <p>Switch surface treatments or inspect the raw particles without resetting the pool. The physics pauses when the tank is offscreen or the tab is hidden. Turn off Animate water for a calm pool whose level still rises.</p>
+    <p>This study uses SPHjs’s CPU solver. Its separate WebGPU solver is not enabled here.</p>
+    <p>Source: <a href="https://github.com/asadm/SPHjs">SPHjs</a>. These comparison controls stay in the specimen. The homepage uses 0.8× particles, Light &amp; depth, refraction and surface foam.</p>
+  </section>
+</section>
+
+<script type="module" src="/assets/js/fluid/study.js"></script>
