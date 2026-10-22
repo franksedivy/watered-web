@@ -1,0 +1,8 @@
+SPHjs by Asad Memon (asadm)
+Source: https://github.com/asadm/SPHjs
+Revision: d3b273deab91a75205ba52c9dc8365787524a92d (24 August 2026)
+Vendored file: js/SPH.js, unmodified.
+
+The upstream README declares MIT. README.upstream.txt preserves that declaration.
+This revision does not include a separate LICENSE file or full MIT notice.
+Resolve that notice gap before selecting this dependency for production.

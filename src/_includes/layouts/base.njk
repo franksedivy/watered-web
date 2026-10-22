@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en"{% if homeWater %} class="no-js"{% endif %}>
   <head>
 	<meta charset="utf-8">
 	<title>{{ title | escape }}</title>
@@ -10,6 +10,7 @@
 	<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
 	<link rel="apple-touch-icon" sizes="180x180" href="/assets/images/apple-touch-icon.png">
 	<link rel="manifest" href="/site.webmanifest">
+	{% if homeWater %}{% include "components/water-startup.njk" %}{% endif %}
 	<link rel="stylesheet" href="/assets/css/main.css">
   </head>
   <body{% if bodyClass %} class="{{ bodyClass | escape }}"{% endif %}>

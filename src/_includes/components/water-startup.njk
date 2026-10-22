@@ -1,0 +1,27 @@
+{# Run before the stylesheet: never paint the CSS fallback while JS is starting. #}
+<script>
+(function () {
+  var root = document.documentElement;
+  root.classList.replace("no-js", "water-pending");
+  var timer;
+  function watch() {
+    clearTimeout(timer);
+    if (!document.hidden && root.classList.contains("water-pending")) {
+      timer = setTimeout(function () {
+        root.dispatchEvent(new Event("water-fallback"));
+      }, 8000);
+    }
+  }
+  function finish() {
+    clearTimeout(timer);
+    document.removeEventListener("visibilitychange", watch);
+  }
+  root.addEventListener("water-fallback", function () {
+    root.classList.replace("water-pending", "water-css");
+    finish();
+  }, { once: true });
+  root.addEventListener("water-selected", finish, { once: true });
+  document.addEventListener("visibilitychange", watch);
+  watch();
+}());
+</script>

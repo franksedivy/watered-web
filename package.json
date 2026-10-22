@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "dev": "eleventy --serve",
-    "build": "eleventy"
+    "build": "eleventy",
+    "test": "node --test test/*.test.js"
   },
   "engines": {
     "node": "24.x"

@@ -1,8 +1,9 @@
 ---
 layout: layouts/specimen.njk
 title: Water specimen — Watered
-description: Three water studies comparing CSS waves with a still image and CSS bubbles.
+description: Interactive SPHjs water followed by three CSS water alternatives.
 specimenSection: water
+bodyClass: page-fluid-study
 ---
 
 {% from "components/water.njk" import water %}
@@ -11,10 +12,17 @@ specimenSection: water
   <p class="type-small">Water specimen</p>
   <h1 class="type-display">A little movement.</h1>
   <p class="type-lead">
-    Three approaches to moving water.
+    Interactive SPHjs water, followed by three CSS alternatives.
     Resize the page and pause each study to compare their surfaces.
   </p>
 </header>
+
+<nav class="fluid-study-nav" aria-label="Water studies">
+  <a href="#water-simulation-title">SPHjs simulation</a>
+  <a href="#water-study-title">CSS alternatives</a>
+</nav>
+
+{% include "components/fluid-study.njk" %}
 
 <section class="water-study" aria-labelledby="water-study-title">
   <h2 id="water-study-title" class="type-heading">CSS waves</h2>

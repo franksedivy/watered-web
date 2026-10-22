@@ -13,7 +13,8 @@ export default function (eleventyConfig) {
 
   eleventyConfig.on("eleventy.before", async ({ directories }) => {
 	const result = await compileAsync("src/styles/main.scss", {
-	  style: "expanded",
+	  // Keep local styles readable; ship compact CSS without another dependency.
+	  style: process.env.ELEVENTY_RUN_MODE === "build" ? "compressed" : "expanded",
 	});
 
 	const cssDirectory = join(directories.output, "assets/css");
