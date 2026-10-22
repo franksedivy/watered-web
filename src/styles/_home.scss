@@ -6,9 +6,6 @@
 html:has(body.page-home),
 body.page-home {
   isolation: isolate;
-  height: 120vh;
-  height: 120dvh;
-  overflow: hidden;
 }
 
 html:has(body.page-home) {
