@@ -37,6 +37,7 @@ if (study) {
   let renderer;
   let frameId = 0;
   let previous = 0;
+  let lastPaint = 0;
   let accumulator = 0;
   let paused = false;
   let inView = true;
@@ -53,7 +54,7 @@ if (study) {
 
   function stop() {
     cancelAnimationFrame(frameId);
-    frameId = previous = accumulator = 0;
+    frameId = previous = lastPaint = accumulator = 0;
     frames = simulationTime = sampleStart = 0;
     frameTimes = [];
   }
@@ -133,11 +134,15 @@ if (study) {
       }
       if (steps === 3) accumulator = 0; // Never catch up a suspended tab.
       simulationTime += performance.now() - before;
-      renderer.advance(steps / 60, engine);
-      renderer.render(engine);
+      // The fixed-step state is identical between physics updates.
+      if (steps) {
+        renderer.advance(steps / 60, engine);
+        renderer.render(engine);
+        frames++;
+        frameTimes.push(lastPaint ? now - lastPaint : elapsed * 1000);
+        lastPaint = now;
+      }
       sampleStart ||= now - elapsed * 1000;
-      frames++;
-      frameTimes.push(elapsed * 1000);
       if (now - sampleStart >= 1000) {
         frameTimes.sort((a, b) => a - b);
         const p95 = frameTimes[Math.floor((frameTimes.length - 1) * 0.95)];

@@ -1,8 +1,6 @@
 // Homepage presentation. Keep page-specific overrides out of the shared foundation.
 
-// Retained iPhone Safari workaround, confirmed during manual testing.
-// The extra height paints beyond the visible viewport; hidden overflow can clip
-// content at large text sizes. Revisit separately from structural CSS cleanup.
+// Keep the fixed glass backdrop isolated from the page content.
 html:has(body.page-home),
 body.page-home {
   isolation: isolate;
@@ -65,6 +63,13 @@ html:has(body.page-home) {
   margin-block-end: 0;
   visibility: hidden;
   pointer-events: none;
+  // Hidden backgrounds still download. Request fallback artwork only if selected.
+  background-image: none;
+  mask-image: none;
+}
+
+.home-water::after {
+  background-image: none;
 }
 
 // Introduction uses the shared layout-grid and typography roles.
@@ -242,12 +247,22 @@ html:has(body.page-home) {
 .no-js .home-water,
 .water-css .home-water {
   visibility: visible;
+  background-image: url("/assets/images/water-still-texture.png");
+  mask-image: url("/assets/images/water-still-mask.svg");
+}
+
+.no-js .home-water::after,
+.water-css .home-water::after {
+  background-image: url("/assets/images/water-still-highlight.svg");
 }
 
 // Hidden water keeps its measurable depth, but its CSS bubbles do no work.
 .home-water .water-bubble {
-  box-shadow: none;
   animation-play-state: paused;
+}
+
+.home-water .water-bubble::before {
+  box-shadow: none;
 }
 
 .no-js .home-water .water-bubble,
@@ -355,6 +370,8 @@ html:has(body.page-home) {
 
 .home-tilt-icon,
 .home-water-toggle-icon {
+  // Let the button own hover and clicks, including over the masked symbol.
+  pointer-events: none;
   inline-size: 1.125rem;
   block-size: 1.125rem;
   background: currentColor;

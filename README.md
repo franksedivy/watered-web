@@ -53,7 +53,7 @@ the same pool and momentum. Use HTTPS for phone sensor testing.
 Run the focused physics checks with:
 
 ```sh
-node --test test/*.test.js
+npm test
 ```
 
 See [study notes](docs/water-simulation-studies.md) for pinned runtime sources,

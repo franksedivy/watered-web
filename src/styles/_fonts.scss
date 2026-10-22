@@ -14,3 +14,15 @@
   font-weight: 400;
   font-display: swap;
 }
+
+// Prefer the smaller Latin face; the full face above remains available for
+// other scripts. Keep this declaration last so English never requests both.
+@font-face {
+  font-family: "Agbalumo";
+  src: url("/assets/fonts/Agbalumo-Latin.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  unicode-range: U+0000-024F, U+0300-036F, U+1E00-1EFF, U+2000-206F,
+    U+20A0-20CF, U+2C60-2C7F, U+A720-A7FF;
+}

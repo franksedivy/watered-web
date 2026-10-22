@@ -30,5 +30,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Test water behaviour
+        run: npm test
+
       - name: Build static site
         run: npm run build

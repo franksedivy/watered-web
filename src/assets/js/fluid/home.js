@@ -40,7 +40,8 @@ if (canvas && !page.classList.contains("water-css")) {
   let lastWidth = 0;
   let lastHeight = 0;
 
-  const canRun = () => waterEnabled && engine && !failed && !motion.matches && !away && inView && !document.hidden;
+  const animationAllowed = () => waterEnabled && !failed && !motion.matches && !away && inView && !document.hidden;
+  const canRun = () => engine && animationAllowed();
 
   function stop() {
     cancelAnimationFrame(frameId);
@@ -131,10 +132,11 @@ if (canvas && !page.classList.contains("water-css")) {
         steps++;
       }
       if (steps === MAX_FRAME_STEPS) accumulator = 0;
-      renderer.advance(steps / 60, engine);
+      // High-refresh displays can schedule a frame before physics advances.
+      if (steps) renderer.advance(steps / 60, engine);
       settleTime += steps / 60;
       // Keep both treatments hidden until the starting grid has settled.
-      if (settleTime >= 0.5) {
+      if (steps && settleTime >= 0.5) {
         renderer.render(engine);
         if (!canvas.hasAttribute("data-ready")) {
           canvas.setAttribute("data-ready", "");
@@ -153,7 +155,7 @@ if (canvas && !page.classList.contains("water-css")) {
     updateWaterControl();
     updateTiltControl();
     if (canRun()) frameId = requestAnimationFrame(frame);
-    else if (waterEnabled && !engine && !loading && !failed && !motion.matches && !away && !document.hidden) start();
+    else if (!engine && !loading && animationAllowed()) start();
   }
 
   async function start() {
@@ -163,9 +165,9 @@ if (canvas && !page.classList.contains("water-css")) {
       const [{ createEngine }, { FluidRenderer }, { createCreditBackdrop }] = await Promise.all([
         import("./sph.js"), import("./renderer.js"), import("./credit-backdrop.js"),
       ]);
-      if (failed) return;
+      if (!animationAllowed()) { loading = false; refresh(); return; }
       [creditBackdrop] = await Promise.all([createCreditBackdrop(credit), icon.decode().catch(() => {})]);
-      if (failed) return;
+      if (!animationAllowed()) { loading = false; refresh(); return; }
       const bounds = canvas.getBoundingClientRect();
       engine = await createEngine({ width: bounds.width * HOME_UNITS_PER_PIXEL,
         height: bounds.height * HOME_UNITS_PER_PIXEL,

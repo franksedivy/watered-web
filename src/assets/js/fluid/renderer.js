@@ -114,6 +114,11 @@ float lightField(vec2 p) {
 void main() {
   float density = texture(densityMap, uv).r;
   float alpha = smoothstep(0.43, 0.53, density);
+  // Most of the glass is empty: skip all surface sampling for clear pixels.
+  if (alpha == 0.0) {
+    color = vec4(0.0);
+    return;
+  }
   vec2 up = surfaceUp * texel;
   float above = texture(densityMap, uv + up * 2.0).r;
   // Green carries motion-driven particle foam in the existing density pass.
@@ -129,11 +134,6 @@ void main() {
     color = vec4(blue * alpha, alpha);
     return;
   }
-  if (alpha == 0.0) {
-    color = vec4(0.0);
-    return;
-  }
-
   // Search against gravity, so depth, the rim and foam follow a tilted pool.
   float edgeX = abs(up.x) < 0.000001 ? 1000000.0 : (up.x > 0.0 ? 1.0 - uv.x : -uv.x) / up.x;
   float edgeY = abs(up.y) < 0.000001 ? 1000000.0 : (up.y > 0.0 ? 1.0 - uv.y : -uv.y) / up.y;
