@@ -46,7 +46,9 @@ comes first, with three CSS alternatives below. Start SPHjs to compare pouring w
 raising and disturbing the pool. Use Water surface to compare Original with Light & depth,
 or Show particles to inspect the solver. The homepage automatically uses 0.8× particles,
 Light & depth, refraction and foam, retaining CSS water without JavaScript or when
-reduced motion or unavailable graphics prevent animation.
+reduced motion or unavailable graphics prevent animation. On supported phones, Enable tilt
+lets the water follow the lowered edge after sensor permission is granted. Rotation keeps
+the same pool and momentum. Use HTTPS for phone sensor testing.
 
 Run the focused physics checks with:
 

@@ -4,7 +4,7 @@ import { SurfaceFoam } from "../src/assets/js/fluid/foam.js";
 
 function pool() {
   return {
-    width: 720, count: 4, particleScale: 1,
+    width: 720, height: 400, count: 4, particleScale: 1,
     x: new Float32Array([100, 115, 100, 115]),
     y: new Float32Array([100, 100, 140, 140]),
     vx: new Float32Array([0, 0, 200, 200]),
@@ -45,4 +45,20 @@ test("Foam freezes without simulation time, fades after motion and clears on res
   assert.ok(foam.values[0] > 0.5);
   foam.clear();
   assert.ok(foam.values.every(value => value === 0));
+});
+
+test("Foam follows a sideways free surface rather than the screen's top edge", () => {
+  const engine = pool();
+  engine.gravityX = 920;
+  engine.gravityY = 0;
+  engine.x.set([100, 100, 140, 140]);
+  engine.y.set([100, 115, 100, 115]);
+  const foam = new SurfaceFoam(8);
+  foam.update(engine, 1 / 60);
+  assert.ok(foam.values.every(value => value === 0), "Buried sideways motion stays clear");
+  engine.vx[0] = 180;
+  foam.update(engine, 1 / 60);
+  assert.ok(foam.values[0] > 0.5);
+  assert.equal(foam.values[2], 0);
+  assert.equal(foam.values[3], 0);
 });

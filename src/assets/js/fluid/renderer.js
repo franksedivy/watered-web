@@ -53,6 +53,7 @@ precision highp float;
 in vec2 uv;
 uniform sampler2D densityMap;
 uniform vec2 texel;
+uniform vec2 surfaceUp;
 uniform int surfaceStyle;
 uniform float time;
 uniform bool foamEnabled;
@@ -113,12 +114,13 @@ float lightField(vec2 p) {
 void main() {
   float density = texture(densityMap, uv).r;
   float alpha = smoothstep(0.43, 0.53, density);
-  float above = texture(densityMap, uv + vec2(0, texel.y * 2.0)).r;
+  vec2 up = surfaceUp * texel;
+  float above = texture(densityMap, uv + up * 2.0).r;
   // Green carries motion-driven particle foam in the existing density pass.
   // An upward density sample confines whitening to the exposed surface band.
   float foam = foamEnabled ? smoothstep(0.015, 0.6, texture(densityMap, uv).g)
     * (1.0 - smoothstep(0.35, 0.8,
-      texture(densityMap, uv + vec2(0, texel.y * foamDepth)).r)) : 0.0;
+      texture(densityMap, uv + up * foamDepth).r)) : 0.0;
   float rim = smoothstep(0.12, 0.4, density - above);
   vec3 blue = mix(vec3(0.01, 0.33, 0.98), vec3(0.05, 0.79, 1.0), uv.y);
   blue = mix(blue, vec3(0.76, 0.98, 1.0), rim * 0.85);
@@ -132,20 +134,22 @@ void main() {
     return;
   }
 
-  // Estimate the distance to the surface with a bounded upward search. This
-  // follows sloshing and droplets rather than assuming a fixed horizontal level.
+  // Search against gravity, so depth, the rim and foam follow a tilted pool.
+  float edgeX = abs(up.x) < 0.000001 ? 1000000.0 : (up.x > 0.0 ? 1.0 - uv.x : -uv.x) / up.x;
+  float edgeY = abs(up.y) < 0.000001 ? 1000000.0 : (up.y > 0.0 ? 1.0 - uv.y : -uv.y) / up.y;
+  float boundaryDepth = min(edgeX, edgeY);
   float depth = 0.0;
   float stride = 2.0;
   for (int i = 0; i < 13; i++) {
-    float sampleY = uv.y + (depth + stride) * texel.y;
-    if (sampleY >= 1.0 || texture(densityMap, vec2(uv.x, sampleY)).r < 0.48) {
+    vec2 samplePoint = uv + up * (depth + stride);
+    if (depth + stride >= boundaryDepth || texture(densityMap, samplePoint).r < 0.48) {
       // Refine the first crossing so the expanding search does not create
       // horizontal colour bands as its sample spacing grows.
       float low = depth;
-      float high = min(depth + stride, (1.0 - uv.y) / texel.y);
+      float high = min(depth + stride, boundaryDepth);
       for (int j = 0; j < 6; j++) {
         float middle = (low + high) * 0.5;
-        if (texture(densityMap, uv + vec2(0, middle * texel.y)).r >= 0.48) low = middle;
+        if (texture(densityMap, uv + up * middle).r >= 0.48) low = middle;
         else high = middle;
       }
       depth = (low + high) * 0.5;
@@ -158,7 +162,8 @@ void main() {
   vec2 gradient = vec2(
     texture(densityMap, uv + vec2(texel.x * 2.0, 0)).r
       - texture(densityMap, uv - vec2(texel.x * 2.0, 0)).r,
-    above - texture(densityMap, uv - vec2(0, texel.y * 2.0)).r);
+    texture(densityMap, uv + vec2(0, texel.y * 2.0)).r
+      - texture(densityMap, uv - vec2(0, texel.y * 2.0)).r);
   vec2 world = uv / texel / 400.0;
   vec2 ripple = vec2(
     sin(world.x * 12.0 + world.y * 6.0 - time * 0.8),
@@ -260,6 +265,7 @@ export class FluidRenderer {
       displayMode: gl.getUniformLocation(this.particles, "displayMode"),
       diameter: gl.getUniformLocation(this.particles, "diameter"),
       texel: gl.getUniformLocation(this.surface, "texel"),
+      surfaceUp: gl.getUniformLocation(this.surface, "surfaceUp"),
       surfaceStyle: gl.getUniformLocation(this.surface, "surfaceStyle"),
       time: gl.getUniformLocation(this.surface, "time"),
       foamEnabled: gl.getUniformLocation(this.surface, "foamEnabled"),
@@ -462,6 +468,9 @@ export class FluidRenderer {
     gl.clear(gl.COLOR_BUFFER_BIT);
     gl.useProgram(this.surface);
     gl.uniform2f(this.locations.texel, 1 / this.canvas.width, 1 / this.canvas.height);
+    const gravity = Math.hypot(engine.gravityX || 0, engine.gravityY || 0);
+    gl.uniform2f(this.locations.surfaceUp, gravity > 0.01 ? -engine.gravityX / gravity : 0,
+      gravity > 0.01 ? engine.gravityY / gravity : 1);
     gl.uniform1i(this.locations.surfaceStyle, this.surfaceStyle === "realistic" ? 1 : 0);
     gl.uniform1f(this.locations.time, this.time);
     gl.uniform1i(this.locations.foamEnabled, this.showFoam ? 1 : 0);

@@ -3,6 +3,7 @@ layout: layouts/base.njk
 title: Watered
 description: The hydration tracker Apple forgot.
 bodyClass: page-home
+homeWater: true
 ---
 
 {% from "components/water.njk" import water %}
@@ -16,7 +17,9 @@ bodyClass: page-home
       height="128"
       alt=""
   >
-  <h1 class="type-display home-wordmark">Watered</h1>
+  <h1 class="type-display home-wordmark">
+    Watered<span class="home-wordmark-fill" aria-hidden="true">Watered</span>
+  </h1>
   <p class="type-lead home-tagline">
     The iOS hydration tracker Apple forgot.
   </p>
@@ -28,7 +31,27 @@ bodyClass: page-home
   </p>
 </footer>
 
-{{ water("home-water") }}
-
-<canvas class="home-water-canvas" data-home-water aria-hidden="true"></canvas>
-<script type="module" src="/assets/js/fluid/home.js"></script>
+{# One full-height clip keeps both water treatments aligned with the glass. #}
+<div id="home-water-frame" class="home-water-frame" aria-hidden="true">
+  {{ water("home-water") }}
+  <canvas class="home-water-canvas" data-home-water aria-hidden="true"></canvas>
+</div>
+<div class="home-water-controls" data-water-controls role="group" aria-label="Water controls" hidden>
+  <p class="type-small home-water-prompt">Drink it!</p>
+  <button type="button" class="home-water-button home-water-toggle" data-water-toggle
+    aria-label="Turn water off" aria-pressed="true" aria-controls="home-water-frame">
+    <span class="home-water-toggle-icon" aria-hidden="true"></span>
+  </button>
+  <span class="home-water-divider" aria-hidden="true">
+    <img src="/assets/images/control-divider-light.svg" width="20" height="1" alt="">
+    <img src="/assets/images/control-divider-shade.svg" width="20" height="1" alt="">
+  </span>
+  <button type="button" class="home-water-button home-tilt" data-water-tilt aria-pressed="false"
+    aria-label="Enable tilt" aria-describedby="water-tilt-status">
+    <span class="home-tilt-icon" aria-hidden="true"></span>
+  </button>
+</div>
+<p id="water-tilt-status" class="home-tilt-status" data-water-tilt-status role="status"></p>
+<script type="module" src="/assets/js/fluid/home.js"
+  onerror="document.documentElement.dispatchEvent(new Event('water-fallback'))"></script>
+<script nomodule>document.documentElement.dispatchEvent(new Event("water-fallback"));</script>
